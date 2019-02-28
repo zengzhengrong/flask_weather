@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Weather is ?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css" />
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="D:\workspace\webappps\django-weather\src\weather\static\weather\css\debuger.css" /> -->
+</head>
+<style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<body>
+    <!-- 第一个section -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container">
+                <figure class="image center">
+                    <img src="{{url_for('static',filename='img/china-city-weather-map.gif')}}" style="max-width: 512px;">
+                </figure>
+            </div>
+        </div>
+    </section>
+    <!-- 第二个section -->
+    <section>
+        <div class="container">
+        {% with messages =get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category,message in messages %}
+                <article class="message is-{{ category }}">
+                        <div class="message-body">
+                            <p class="has-text-centered is-size-4">{{message}}</p>
+                        </div>
+                </article>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}    
+        </div>
+    </section>
+    <!-- 第三个section -->
+    <section class="section has-background-light">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <form method="POST">
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input is-info" type="text" name="city" placeholder="城市名或地区">
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-info">
+                                    查询
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第四个section -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                {% for city in citys %}
+                <div class="column is-one-third">
+                    <article class="media">
+                        <figure class="media-left">
+                            {% if city.icon %}
+                                <img src="{{url_for('static',filename='icon/' + city.icon + '.png')}}" alt="Image" style="max-width: 75px;">
+                            {% endif %}
+                        </figure>
+                        <div class="media-content">
+                            <div class="content">
+                                <h1 class="title">{{ city.name }}</h1>
+                                <p class="is-size-5 ">{{ city.description }}</p>
+                                <p class="is-size-3">{{ city.temp }}</p>
+                            </div>
+                        </div>
+                    </article>    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>
